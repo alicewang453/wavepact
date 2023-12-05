@@ -32,9 +32,18 @@
     width: 100%;
     height: 100%;
     padding: 20px;
-    background: #dcdcdc;
+    /* background: #dcdcdc; */
     transition: background .2s ease-in-out;
 }
+
+.likert .l1 { background-color: #FF0000; } /* Strongly disagree - Red */
+.likert .l2 { background-color: #FF5500; }
+.likert .l3 { background-color: #FFAA00; }
+.likert .l4 { background-color: #FFFF00; } /* Neutral - Yellow */
+.likert .l5 { background-color: #AAFF00; }
+.likert .l6 { background-color: #55FF00; }
+.likert .l7 { background-color: #00FF00; } /* Strongly agree - Green */
+
 
 .likert input:checked + span {
     outline: black auto 1px;
