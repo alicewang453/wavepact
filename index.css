@@ -1,3 +1,29 @@
+body {
+    /* background-color: #ead9ea; */
+    font-family: 'Monaco', monospace;
+    /* color: white; */
+  }
+
+  button {
+    background-color: #54adad; /* Green background */
+    border: none; /* No border */
+    color: white; /* White text */
+    padding: 15px 32px; /* Top and bottom padding, left and right padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* No underline on the text */
+    display: inline-block; /* Inline block element */
+    font-size: 16px; /* Font size */
+    font-family: 'Monaco', monospace;
+    margin: 4px 2px; /* Margin around the button */
+    cursor: pointer; /* Cursor changes to a pointer when hovered */
+    border-radius: 25px; /* Rounded corners with 25px radius */
+    transition-duration: 0.4s; /* Smooth transition for hover effects */
+  }
+  
+button:hover {
+    background-color: #479c9c; /* Darker shade of green on hover */
+  }
+
 .likert {
     --likert-rows: 7;
     display: inline-grid;
@@ -36,13 +62,13 @@
     transition: background .2s ease-in-out;
 }
 
-.likert .l1 { background-color: #FF0000; } /* Strongly disagree - Red */
-.likert .l2 { background-color: #FF5500; }
-.likert .l3 { background-color: #FFAA00; }
-.likert .l4 { background-color: #FFFF00; } /* Neutral - Yellow */
-.likert .l5 { background-color: #AAFF00; }
-.likert .l6 { background-color: #55FF00; }
-.likert .l7 { background-color: #00FF00; } /* Strongly agree - Green */
+.likert .l1 { background-color: #b04360; } /* Strongly disagree - Red */
+.likert .l2 { background-color: #d46281; }
+.likert .l3 { background-color: #eb88a2; }
+.likert .l4 { background-color: #9f9f9f; } /* Neutral - Yellow */
+.likert .l5 { background-color: #6acf6a; }
+.likert .l6 { background-color: #3fb53f; }
+.likert .l7 { background-color: #469546; } /* Strongly agree - Green */
 
 
 .likert input:checked + span {
@@ -55,6 +81,6 @@
 }
 
 .likert span:hover {
-    background: #f1f1f1;
+    /* background: #f1f1f1; */
     outline: lightgrey auto 0.5px;
 }

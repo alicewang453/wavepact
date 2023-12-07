@@ -9,10 +9,11 @@
   
 <body>
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'keyboard')" id="defaultOpen">Play Keyboard</button>
-        <!-- <button class="tablinks" onclick="openTab(event, 'options')">Synth Options</button> -->
+        <button class="tablinks" onclick="openTab(event, 'keyboard')" id="defaultOpen">Your Results</button>
+        <button class="tablinks" onclick="openTab(event, 'explanations')">What does this mean?</button>
     </div>
 
+    <p class="sectionlabel">Your personality is: <b>INFP-T</b></p>
     <div class="container">
         <canvas id="globalVisualizer" width="300" height="170" style="border:2px solid #000000">
           wave form visualizer
@@ -20,11 +21,36 @@
     </div>
 
     <div id="keyboard" class="tabcontent">
+        
+        <div class="section">
+            <p class="headinglabel">Try out your wave-sonality!</p>
+            <img id="keymap" src="12edo-keyboard.jpg" alt="Keybinding Image">
+            <p class="explainer">
+                This image displays the layout of notes you can play
+                using a QWERTY keyboard.
+            </p>
+        </div>
+    </div>
+
+    <div id="explanations" class="tabcontent">
+        <h2>Mediator (INFP-A / INFP-T)</h2>
+        <p>WHO IS A MEDIATOR (INFP)?
+            <br><br>
+            A Mediator (INFP) is someone who possesses the Introverted, Intuitive, Feeling, and Prospecting personality traits. These rare personality types tend to be quiet, open-minded, and imaginative, and they apply a caring and creative approach to everything they do.
+            <br><br>
+            Although they may seem quiet or unassuming, Mediators (INFPs) have vibrant, passionate inner lives. Creative and imaginative, they happily lose themselves in daydreams, inventing all sorts of stories and conversations in their minds. These personalities are known for their sensitivity – Mediators can have profound emotional responses to music, art, nature, and the people around them.
+            <br><br>
+            Idealistic and empathetic, Mediators long for deep, soulful relationships, and they feel called to help others. But because this personality type makes up such a small portion of the population, Mediators may sometimes feel lonely or invisible, adrift in a world that doesn’t seem to appreciate the traits that make them unique.
+            
+            </p>
+    </div>
+
+    <div id="options" class="tabcontent">
         <p class="sectionlabel"> Choose Tuning Method:&NonBreakingSpace; </p>
         <form id="Tuning">
-            <input type="radio" id="12-EDO" name="tunings" value="12-EDO">
+            <input type="radio" id="12-EDO" name="tunings" value="12-EDO" checked>
             <label for="12-EDO">12-EDO</label>
-            <input type="radio" id="31-EDO" name="tunings" value="31-EDO" checked>
+            <input type="radio" id="31-EDO" name="tunings" value="31-EDO">
             <label for="31-EDO">31-EDO</label>
 
         </form>
@@ -45,17 +71,7 @@
         </div>
 
         <br>
-        <div class="section">
-            <p class="headinglabel">Map of Keybindings</p>
-            <img id="keymap" src="31edo-keyboard.jpg" alt="Keybinding Image">
-            <p class="explainer">
-                This image displays the layout of notes you can play
-                using a QWERTY keyboard.
-            </p>
-        </div>
-    </div>
 
-    <div id="options" class="tabcontent">
         <p class="sectionlabel"> Choose Waveform Type:&nbsp;</p>
         <form id="Waveform">
             <input type="radio" id="sine" name="waveforms" value="sine" checked>
