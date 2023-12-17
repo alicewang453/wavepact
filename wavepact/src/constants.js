@@ -39,7 +39,7 @@ export const jsQuizz = {
               "Square",
               "Triangle",
             ],
-            type: "sound",
+            type: "osc",
             answerVals: {
               "Sine": {IE: 0, SN: 5, TF: 0, JP: 0, AT: 0},
               "Sawtooth": {IE: 0, SN: -2, TF: 0, JP: 0, AT: 0},

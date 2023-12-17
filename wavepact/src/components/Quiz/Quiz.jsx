@@ -44,11 +44,11 @@ const Quiz = ({ questions }) => {
         };
     }, []);
 
-    // useEffect(() => {
-    //     return () => {
-    //         cancelAnimationFrame(animationId);
-    //     };
-    // }, [animationId]);
+    useEffect(() => {
+        return () => {
+            cancelAnimationFrame(animationId);
+        };
+    }, [animationId]);
 
     const draw = () => {
         if (!analyser) return;
@@ -73,7 +73,8 @@ const Quiz = ({ questions }) => {
         canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = "rgb(31,117,254)";
+        // canvasCtx.strokeStyle = "rgb(31,117,254)";
+        canvasCtx.strokeStyle = "#d08642" // css accent color
 
         canvasCtx.beginPath();
 
@@ -122,25 +123,8 @@ const Quiz = ({ questions }) => {
         setPlaying(true);
         setCurrSound(noiseType);
 
-        draw();
-
-
-        // // Create or reuse the analyser node
-        // let analyserNode = analyser;
-        // if (!analyserNode) {
-        //     analyserNode = audioContext.createAnalyser();
-        //     analyserNode.fftSize = 2048;
-        //     setAnalyser(analyserNode);
-        // }
-
-        // // Connect the nodes in the correct order
-        // noiseSource.connect(analyserNode);
-        // analyserNode.connect(audioContext.destination);
-
-        // noiseSource.start();
-        // setSource(noiseSource);
-
-        // requestAnimationFrame(draw);
+        // draw();
+        requestAnimationFrame(draw);
     };
 
     // Functions for generating different types of noise
@@ -201,18 +185,96 @@ const Quiz = ({ questions }) => {
         playNoise(noiseBuffer, noiseType);
     };
 
-    const handlePlay = (noiseType) => {
-        if (playing) {
-            source.stop();
-            if (currSound === noiseType) {
-                setPlaying(false);
-                setCurrSound(null);
+    const generateOscs = (oscType) => {
+        const gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(0.8, audioContext.currentTime);
+        
+        const freq = 261.625565300598634;
+
+        const npartials = 1; // change for additive synthesis
+        const amOn = false;
+        
+        // create oscs and store them in a list
+        var oscs = []
+        for (var i=0; i<npartials; i++) {
+            oscs[i] = audioContext.createOscillator();
+        }
+
+        var waveform = oscType.toLowerCase();
+
+        if (waveform === "square" || waveform === "sawtooth") {
+            gainNode.gain.setValueAtTime(0.4, audioContext.currentTime); //saws & squares are loud 
+          }
+        // assign frequencies and start oscs
+        for (var i = 0; i < oscs.length; i++) {
+            // frequency
+            if (i === 0) {
+                oscs[i].frequency.setValueAtTime(
+                    freq,
+                    audioContext.currentTime
+            
+                )
+            } else if (i % 2 === 0) {
+                oscs[i].frequency.setValueAtTime(
+                    (i + 1) * freq + Math.random() * 5,
+                    audioContext.currentTime
+                )
+            } else {
+                oscs[i].frequency.setValueAtTime(
+                    (i + 1) * freq - Math.random() * 5,
+                    audioContext.currentTime
+                )
+            }    
+            // waveform
+            oscs[i].type = waveform;
+            if (amOn === "true") {
+                oscs[i].connect(modulated).connect(gainNode).connect(globalGain);
+            } else {
+                oscs[i].connect(gainNode).connect(globalGain);
+            }
+            oscs[i].start();
+        }
+        return oscs;
+    }
+
+    const handlePlay = (noiseType, questionType) => {
+        if (questionType === 'noise') {
+            if (playing) {
+                source.stop();
+                if (currSound === noiseType) {
+                    setPlaying(false);
+                    setCurrSound(null);
+                } else {
+                    generateNoise(noiseType);
+                }
             } else {
                 generateNoise(noiseType);
             }
+        } else if (questionType === 'osc') {
+            if (playing) {
+                source.forEach((osc) => {
+            
+                    osc.stop();
+                    
+                });
+                if (currSound === noiseType) {
+                    setPlaying(false);
+                    setCurrSound(null);
+                } else {
+                    var oscs = generateOscs(noiseType);
+                    setSource(oscs);
+                    setCurrSound(noiseType);
+                }
+            } else {
+                var oscs = generateOscs(noiseType);
+                setSource(oscs);
+                setPlaying(true);
+                setCurrSound(noiseType);
+            }
         } else {
-            generateNoise(noiseType);
+            console.log('do nothing');
         }
+        
     };
 
     const { question, choices, answerVals, type} = questions[currentQuestion]; 
@@ -235,7 +297,7 @@ const Quiz = ({ questions }) => {
 
     const onClickNext = () => {
         if (playing) {
-            handlePlay(currSound);
+            handlePlay(currSound, type);
         } 
         setAnswerIdx(null);
         console.log('Selected: ', answerChoice)
@@ -275,7 +337,7 @@ const Quiz = ({ questions }) => {
     // }
 
     const getAnswerUI = () => {
-        if (type === "noise") {
+        if (type === "noise" || type === "osc") {
             return (
                 <ul>
                     {
@@ -283,7 +345,7 @@ const Quiz = ({ questions }) => {
                             <li
                                 onClick={function(event){
                                     onAnswerClick(choice, index, answerVals);
-                                    handlePlay(choice);
+                                    handlePlay(choice, type);
                                     }
                                 }
                                 key={choice}
@@ -294,7 +356,7 @@ const Quiz = ({ questions }) => {
                         ))
                     }
                 </ul>)
-        }
+        } 
 
         return (
         <ul>
@@ -328,7 +390,7 @@ const Quiz = ({ questions }) => {
                     {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
                 </button>
             </div>
-            <div class="container">
+            <div class="visualizer">
                 <canvas ref={canvasRef} width="300" height="170">
                 wave form visualizer
                 </canvas>
