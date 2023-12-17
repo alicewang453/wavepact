@@ -36,7 +36,7 @@ const Quiz = ({ questions }) => {
         // globalAnalyser.connect(audioCtx.destination)
         setAnalyser(globalAnalyser);
         console.log('created analyser');
-        draw();
+        // draw();
         return () => {
             if (audioContext) {
                 audioContext.close();
@@ -52,67 +52,51 @@ const Quiz = ({ questions }) => {
 
     const draw = () => {
         if (!analyser) return;
-        
-        var WIDTH = 300;
-        var HEIGHT = 300;
 
         analyser.fftSize = 2048;
         var bufferLength = analyser.frequencyBinCount;
         var dataArray = new Uint8Array(bufferLength);
         analyser.getByteTimeDomainData(dataArray);
+        // console.log(dataArray);
     
         var canvas = canvasRef.current;
         var canvasCtx = canvas.getContext("2d");
+
+        var WIDTH = canvas.width;
+        var HEIGHT = canvas.height;
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        var drawVisual = requestAnimationFrame(draw);
+        analyser.getByteTimeDomainData(dataArray);
+        // console.log(dataArray);
 
-        analyser.getByteFrequencyData(dataArray);
+        canvasCtx.fillStyle = "white";
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-        canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+        canvasCtx.lineWidth = 2;
+        canvasCtx.strokeStyle = "rgb(31,117,254)";
 
-        var barWidth = (WIDTH / bufferLength) * 2.5;
-        var barHeight;
+        canvasCtx.beginPath();
+
+        var sliceWidth = canvas.width * 1.0 / bufferLength;
         var x = 0;
-
+        // console.log('buffer len: ', bufferLength);
         for (var i = 0; i < bufferLength; i++) {
-            barHeight = dataArray[i] * 2;
-
-            canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
-            canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight);
-
-            x += barWidth + 1;
+            var v = dataArray[i] / 128.0;
+            // console.log(v);
+            var y = v * canvas.height / 2;
+            if (i === 0) {
+                canvasCtx.moveTo(x, y);
+            } else {
+                canvasCtx.lineTo(x, y);
+            }
+            x += sliceWidth;
         }
 
-        // requestAnimationFrame(draw);
+        canvasCtx.lineTo(canvas.width, canvas.height / 2);
+        canvasCtx.stroke();
 
-        // analyser.getByteTimeDomainData(dataArray);
-
-        // canvasCtx.fillStyle = "white";
-        // canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // canvasCtx.lineWidth = 2;
-        // canvasCtx.strokeStyle = "rgb(31,117,254)";
-
-        // canvasCtx.beginPath();
-
-        // var sliceWidth = canvas.width * 1.0 / bufferLength;
-        // var x = 0;
-
-        // for (var i = 0; i < bufferLength; i++) {
-        //     var v = dataArray[i] / 128.0;
-        //     var y = v * canvas.height / 2;
-        //     if (i === 0) {
-        //         canvasCtx.moveTo(x, y);
-        //     } else {
-        //         canvasCtx.lineTo(x, y);
-        //     }
-        //     x += sliceWidth;
-        // }
-
-        // canvasCtx.lineTo(canvas.width, canvas.height / 2);
-        // canvasCtx.stroke();
+        const newAnimationId = requestAnimationFrame(draw);
+        setAnimationId(newAnimationId);
     };
 
     // Generic function to play a given noise type
@@ -125,17 +109,20 @@ const Quiz = ({ questions }) => {
         noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
         noiseGain.connect(globalGain);
 
+        // console.log(noiseBuffer);
         let noiseSource = audioContext.createBufferSource();
         noiseSource.buffer = noiseBuffer;
-        noiseSource.loop = true;
+        noiseSource.loop = false;
         noiseSource.connect(noiseGain);
 
-        noiseSource.connect(analyser);
+        noiseGain.connect(analyser);
 
         noiseSource.start();
         setSource(noiseSource);
         setPlaying(true);
         setCurrSound(noiseType);
+
+        draw();
 
 
         // // Create or reuse the analyser node
