@@ -221,13 +221,15 @@ const Quiz = ({ questions }) => {
             filter.Q.value = 30; 
     
             const envelope = createEnvelope(decays[i]);
-    
             whiteNoise.connect(filter).connect(envelope).connect(audioContext.destination);
+            filter.connect(analyser)
         }
     
 
         whiteNoise.start();
+        requestAnimationFrame(draw);
         whiteNoise.stop(audioContext.currentTime + 0.04);
+
     }
 
     const playSound = (soundType) => {
