@@ -1,6 +1,7 @@
 ## Intro
 Online quizzes that tell users something about themselves are a popular way for users to engage lightheartedly and enjoyably in a topic. Standard personality quizzes such as the 16personalities test rely on questions about the user’s own life and experiences to give the user a result (in this case an MBTI personality type). However, websites such as Buzzfeed have popularized quizzes that rely on atypical measures to assign a personality trait. Inspired by the success of this format, we decided to make a quiz that assigns the user an MBTI personality type based on hearing and choosing their favorite samples made using computational sound techniques. This would present a topic that is often confusing and esoteric to the general public (digital audio) in a popular and digestible format.
-Our aim was to create an interactive personality test using digitally generated sound preferences that users with little knowledge of computational sound, digital music production, or physical modeling could have fun doing while learning about these topics in the process.
+
+**Our aim was to create an interactive personality test using digitally generated sound preferences that users with little knowledge of computational sound, digital music production, or physical modeling could have fun doing while learning about these topics in the process.**
 
 The core structure of this project is a webpage in the React.js framework that uses the Web Audio API to generate sounds. Notable files in our repository are constants.js and Quiz.jsx.
 
