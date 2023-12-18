@@ -49,7 +49,7 @@ export const jsQuizz = {
           },
           { // rephrase q
             question:
-              "Slide to choose your preferred number of partials for additive synthesis!",
+              "Slide to add waves until you like it!",
             type: "slider",
             sliderRange: { min: 1, max: 10},
             defaultValue: 5, 
