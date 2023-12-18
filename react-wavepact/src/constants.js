@@ -122,3 +122,5 @@ export const jsQuizz = {
     JP: 0, //judging - prospecting
     AT: 0, //assertive - turbulent
   }
+
+  // export const persona
