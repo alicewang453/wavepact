@@ -9,6 +9,9 @@ const Quiz = ({ questions }) => {
     const [answerPersonality, setAnswerPersonality] = useState(null);
     const [result, setResult] = useState(resultInitialState);
     const [showResult, setShowResult] = useState(false);
+    const [sliderValue, setSliderValue] = useState(
+        questions[currentQuestion]?.defaultValue || 5
+      );
 
     const [audioContext, setAudioContext] = useState(null);
     // const [whiteNoiseBuffer, setWhiteNoiseBuffer] = useState(null);
@@ -50,6 +53,7 @@ const Quiz = ({ questions }) => {
         };
     }, [animationId]);
 
+    // vizualizer
     const draw = () => {
         if (!analyser) return;
 
@@ -295,6 +299,16 @@ const Quiz = ({ questions }) => {
         // }
     }
 
+    const onSliderChange = (event) => {
+        const value = parseFloat(event.target.value, 10);
+        setSliderValue(value);
+        console.log("value",value)
+        const currentAnswerVals = questions[currentQuestion].answerVals;
+        console.log("selected answerVals", currentAnswerVals)
+        onAnswerClick(value, value, currentAnswerVals);
+    };
+
+
     const onClickNext = () => {
         if (playing) {
             handlePlay(currSound, type);
@@ -302,15 +316,29 @@ const Quiz = ({ questions }) => {
         setAnswerIdx(null);
         console.log('Selected: ', answerChoice)
         console.log('prev result: ', result);
-        var newResult = {
-            IE: result.IE + answerPersonality.IE,
-            SN: result.SN + answerPersonality.SN,
-            TF: result.TF + answerPersonality.TF,
-            JP: result.JP + answerPersonality.JP,
-            AT: result.AT + answerPersonality.AT, 
+        if (type === "slider") {
+            var newResult = {
+                IE: result.IE + answerPersonality.IE,
+                SN: result.SN + answerPersonality.SN,
+                TF: result.TF + answerPersonality.TF,
+                JP: result.JP + answerPersonality.JP,
+                AT: result.AT + answerPersonality.AT, 
+            };
+            setResult(newResult);
+            console.log('new result: ', newResult);
+        } else {
+            // Handle other types of answers
+            var newResult = {
+              IE: result.IE + answerPersonality.IE,
+              SN: result.SN + answerPersonality.SN,
+              TF: result.TF + answerPersonality.TF,
+              JP: result.JP + answerPersonality.JP,
+              AT: result.AT + answerPersonality.AT,
+            };
+            setResult(newResult);
         }
-        setResult(newResult);
-        console.log('new result: ', newResult);
+
+        
         //     prev.IE += answerPersonality.IE;
         //     prev.SN += answerPersonality.SN;
         //     prev.TF += answerPersonality.TF;
@@ -357,6 +385,21 @@ const Quiz = ({ questions }) => {
                     }
                 </ul>)
         } 
+        if (type === "slider") {
+            return (
+              <div className="slider-container">
+                <input
+                  type="range"
+                  min={questions[currentQuestion]?.sliderRange.min}
+                  max={questions[currentQuestion]?.sliderRange.max}
+                  step={1}
+                  value={sliderValue}
+                  onChange={onSliderChange}
+                />
+                <span>{sliderValue}</span>
+              </div>
+            );
+          }
 
         return (
         <ul>

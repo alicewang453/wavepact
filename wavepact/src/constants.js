@@ -60,42 +60,26 @@ export const jsQuizz = {
               "Tomfoolerous Tidal Cycles": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
             },
           },
-    //     {
-    //     question:
-    //       "Which of the following is used in React.js to increase performance?",
-    //     choices: [
-    //       "Virtual DOM",
-    //       "Original DOM",
-    //       "Both A and B",
-    //       "None of the above",
-    //     ],
-    //     type: "MCQs",
-    //     correctAnswer: "Virtual DOM",
-    //   },
-    //   {
-    //     question: "What is ReactJS?",
-    //     choices: [
-    //       "Server-side framework",
-    //       "User Interface framework",
-    //       "both a and b",
-    //       "None of the above",
-    //     ],
-    //     type: "MCQs",
-    //     correctAnswer: "User Interface framework",
-    //   },
-    //   {
-    //     question:
-    //       "Identify the one which is used to pass data to components from outside",
-    //     choices: ["Render with arguments", "setState", "PropTypes", "props"],
-    //     type: "MCQs",
-    //     correctAnswer: "props",
-    //   },
-    //   {
-    //     question: "In which language is React.js written?",
-    //     choices: ["Python", "Java", "C#", "JavaScript"],
-    //     type: "MCQs",
-    //     correctAnswer: "JavaScript",
-    //   },
+          {
+            question:
+              "Choose your preferred number of partials for additive synthesis! (Adjust the scale to your desired amount)",
+            type: "slider",
+            sliderRange: { min: 0, max: 10},
+            defaultValue: 5, 
+            answerVals: { // change values later 
+              0: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              1: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
+              2: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              3: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              4: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              5: { IE: 0, SN: 0, TF: 0, JP: 0, AT: 2 },  // For slider value 0
+              6: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
+              7: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              8: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              9: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              10: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 }
+            },
+          }
     //   {
     //     question: "What is Babel?",
     //     choices: [
