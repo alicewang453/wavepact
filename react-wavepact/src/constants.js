@@ -11,10 +11,10 @@ export const jsQuizz = {
             ],
             type: "noise",
             answerVals: {
-              "White Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: 2},
-              "Pink Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: -2},
+              "White Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: 5},
+              "Pink Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: 2},
               "Brown Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: -5},
-              "Blue Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: 5},
+              "Blue Noise": {IE: 0, SN: 0, TF: 0, JP: 0, AT: -2},
             },
           },
         {
@@ -22,12 +22,12 @@ export const jsQuizz = {
               "What sound effect do you like best?",
             choices: [
               "Babbling Brook",
-              "Muttering Motor",
+              "Ticking Clock",
             ],
             type: "sound",
             answerVals: {
-              "Babbling Brook": {IE: 0, SN: 0, TF: 5, JP: 5, AT: 0},
-              "Muttering Motor": {IE: 0, SN: 0, TF: -5, JP: -5, AT: 0},
+              "Babbling Brook": {IE: 0, SN: 0, TF: 5, JP: 3, AT: 0},
+              "Ticking Clock": {IE: 0, SN: 0, TF: -5, JP: -3, AT: 0},
             },
           },
         {
@@ -41,30 +41,29 @@ export const jsQuizz = {
             ],
             type: "osc",
             answerVals: {
-              "Sine": {IE: 0, SN: 5, TF: 0, JP: 0, AT: 0},
-              "Sawtooth": {IE: 0, SN: -2, TF: 0, JP: 0, AT: 0},
-              "Square": {IE: 0, SN: -5, TF: 0, JP: 0, AT: 0},
-              "Triangle": {IE: 0, SN: 2, TF: 0, JP: 0, AT: 0},
+              "Sine": {IE: 0, SN: -3.5, TF: 0, JP: 0, AT: -3},
+              "Sawtooth": {IE: 0, SN: 1.5, TF: 0, JP: 0, AT: 1},
+              "Square": {IE: 0, SN: 3.5, TF: 0, JP: 0, AT: 3},
+              "Triangle": {IE: 0, SN: -1.5, TF: 0, JP: 0, AT: -1},
             },
           },
           { // rephrase q
             question:
               "Slide to choose your preferred number of partials for additive synthesis!",
             type: "slider",
-            sliderRange: { min: 0, max: 10},
+            sliderRange: { min: 1, max: 10},
             defaultValue: 5, 
             answerVals: { // change values later 
-              0: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              1: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
-              2: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              3: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              4: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              5: { IE: 0, SN: 0, TF: 0, JP: 0, AT: 2 },  // For slider value 0
-              6: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
-              7: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              8: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              9: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              10: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 }
+              1: { IE: -5, SN: 0, TF: 0, JP: 0, AT: 0 },  // For slider value 1
+              2: { IE: -4, SN: 0, TF: 0, JP: 0, AT: 0 },
+              3: { IE: -3, SN: 0, TF: 0, JP: 0, AT: 0 },
+              4: { IE: -2, SN: 0, TF: 0, JP: 0, AT: 0 },
+              5: { IE: -1, SN: 0, TF: 0, JP: 0, AT: 0 },  // For slider value 0
+              6: { IE: 1, SN: 0, TF: 0, JP: 0, AT: 0 },  // For slider value 1
+              7: { IE: 2, SN: 0, TF: 0, JP: 0, AT: 0 },
+              8: { IE: 3, SN: 0, TF: 0, JP: 0, AT: 0 },
+              9: { IE: 4, SN: 0, TF: 0, JP: 0, AT: 0 },
+              10: { IE: 5, SN: 0, TF: 0, JP: 0, AT: 0 }
             }
           }, 
           { // insert normal 
@@ -76,8 +75,8 @@ export const jsQuizz = {
             ],
             type: "blank",
             answerVals: {
-              "Low Pass Filter": {IE: 5, SN: 0, TF: 0, JP: 0, AT: 0},
-              "High Pass Filter": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
+              "Low Pass Filter": {IE: -2.5, SN: 0, TF: 0, JP: 0, AT: 0},
+              "High Pass Filter": {IE: 2.5, SN: 0, TF: 0, JP: 0, AT: 0},
             },
           },
           { // i think we just choose a frequency and let them change the gain 
@@ -87,17 +86,16 @@ export const jsQuizz = {
             type: "slider",
             defaultValue: 5, 
             answerVals: { // change values later 
-              0: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              1: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
-              2: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              3: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              4: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              5: { IE: 0, SN: 0, TF: 0, JP: 0, AT: 2 },  // For slider value 0
-              6: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
-              7: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              8: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              9: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
-              10: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 }
+              0: { IE: 0, SN: -5, TF: 0, JP: 0, AT: 0 },
+              1: { IE: 0, SN: -4, TF: 0, JP: 0, AT: 0 },  // For slider value 1
+              2: { IE: 0, SN: -3, TF: 0, JP: 0, AT: 0 },
+              3: { IE: 0, SN: -2, TF: 0, JP: 0, AT: 0 },
+              4: { IE: 0, SN: -1, TF: 0, JP: 0, AT: 0 },
+              5: { IE: 0, SN: 1, TF: 0, JP: 0, AT: 0 },  // For slider value 0
+              6: { IE: 0, SN: 2, TF: 0, JP: 0, AT: 0 },  // For slider value 1
+              7: { IE: 0, SN: 3, TF: 0, JP: 0, AT: 0 },
+              8: { IE: 0, SN: 4, TF: 0, JP: 0, AT: 0 },
+              9: { IE: 0, SN: 5, TF: 0, JP: 0, AT: 0 },
             }
           },
           { 
@@ -109,8 +107,8 @@ export const jsQuizz = {
             ],
             type: "blank",
             answerVals: {
-              "AM (Amplitude Modulation)": {IE: 5, SN: 0, TF: 0, JP: 0, AT: 0},
-              "FM (Frequency Modulation)": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
+              "AM (Amplitude Modulation)": {IE: 0, SN: 0, TF: -3, JP: 5, AT: 0},
+              "FM (Frequency Modulation)": {IE: 0, SN: 0, TF: 3, JP: -5, AT: 0},
             },
           }
     ],
