@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { resultInitialState } from "../../constants";
+import { personalityNames, resultInitialState } from "../../constants";
 import "./Quiz.scss";
 
 const Quiz = ({ questions }) => {
@@ -597,6 +597,9 @@ const Quiz = ({ questions }) => {
 
             <span className="ptype-message">{pytpeMessage}</span>
             <span className='ptype'>{ptype}</span>
+            <br></br>
+            <a href="https://www.16personalities.com/estp-personality" target="_blank" class="pname">{personalityNames[ptype4]}</a>
+            <br></br>
         </>
         )
     }

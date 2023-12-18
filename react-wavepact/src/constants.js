@@ -73,7 +73,7 @@ export const jsQuizz = {
               "Low Pass Filter",
               "High Pass Filter",
             ],
-            type: "sound",
+            type: "blank",
             answerVals: {
               "Low Pass Filter": {IE: -2.5, SN: 0, TF: 0, JP: 0, AT: 0},
               "High Pass Filter": {IE: 2.5, SN: 0, TF: 0, JP: 0, AT: 0},
@@ -123,4 +123,21 @@ export const jsQuizz = {
     AT: 0, //assertive - turbulent
   }
 
-  // export const persona
+  export const personalityNames = {
+    'INTJ': 'Architect',
+    'INTP': 'Logician',
+    'ENTJ': 'Commander',
+    'ENTP': 'Debater',
+    'INFJ': 'Advocate',
+    'INFP': 'Mediator',
+    'ENFJ': 'Protagonist',
+    'ENFP': 'Campaigner',
+    'ISTJ': 'Logistician',
+    'ISFJ': 'Defender',
+    'ESTJ': 'Executive',
+    'ESFJ': 'Consul',
+    'ISTP': 'Virtuoso',
+    'ISFP': 'Adventurer',
+    'ESTP': 'Entrepreneur',
+    'ESFP': 'Entertainer'
+  }
