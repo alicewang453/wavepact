@@ -512,6 +512,27 @@ const Quiz = ({ questions }) => {
         </ul>)
     }
 
+    const getResult = () => {
+        const ie = result.IE > 0 ? "E" : "I";
+        const sn = result.SN > 0 ? "N" : "S";
+        const tf = result.TF > 0 ? "F" : "T";
+        const jp = result.JP > 0 ? "P" : "J";
+        const at = result.AT > 0 ? "T" : "A";
+
+        const ptype4 = ie.concat(sn, tf, jp); 
+        const ptype = ie.concat(sn, tf, jp, '-', at);
+        const pytpeMessage = "Your personality type is ";
+
+        // const percentages = 
+        
+        return ( <>
+
+            <span className="ptype-message">{pytpeMessage}</span>
+            <span className='ptype'>{ptype}</span>
+        </>
+        )
+    }
+
     return (
         <div className="quiz-container">
             {!showResult ? (<>
@@ -530,7 +551,8 @@ const Quiz = ({ questions }) => {
                 </canvas>
             </div>
         </>) : <div className="result">
-            <h3>Result</h3>
+            {getResult()}
+            {/* <h3>Result</h3>
             <p>
                 Introversion/Extraversion: <span>{result.IE}</span>
             </p>
@@ -545,7 +567,7 @@ const Quiz = ({ questions }) => {
             </p>
             <p>
                 Assertive/Turbulent: <span>{result.AT}</span>
-            </p>
+            </p> */}
             <button onClick={onTryAgain}>Play again</button>  {/* change to share results */}
             </div>}
         

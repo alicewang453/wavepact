@@ -78,6 +78,18 @@
     .result {
         text-align: center;
 
+        .ptype {
+            font-size: 32px;
+            font-weight: 500;
+            color: $accent;
+        }
+        
+        .ptype-message {
+            font-size: 16px;
+            font-weight: 500;
+            color: $primary;
+        }
+
         h3 {
             font-size: 24px;
             letter-spacing: 1.4px;
