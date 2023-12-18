@@ -415,9 +415,7 @@ const Quiz = ({ questions }) => {
         } else if (questionType === 'osc') {
             if (playing) {
                 source_arr.forEach((osc) => {
-            
                     osc.stop();
-                    
                 });
                 if (currSound === noiseType) {
                     setPlaying(false);
@@ -436,7 +434,6 @@ const Quiz = ({ questions }) => {
         } else {
             console.log('do nothing');
         }
-        
     };
 
     const { question, choices, answerVals, type} = questions[currentQuestion]; 
