@@ -15,7 +15,7 @@ const Quiz = ({ questions }) => {
 
     const [audioContext, setAudioContext] = useState(null);
     // const [whiteNoiseBuffer, setWhiteNoiseBuffer] = useState(null);
-    const [source, setSource] = useState(null);
+    const [source_arr, setSource] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [currSound, setCurrSound] = useState(null);
 
@@ -104,36 +104,9 @@ const Quiz = ({ questions }) => {
         setAnimationId(newAnimationId);
     };
 
-    // Generic function to play a given noise type
-    const playNoise = (noiseBuffer, noiseType) => {
-        if (source) {
-            source.stop();
-            setSource(null);
-        }
-        const noiseGain = audioContext.createGain();
-        noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
-        noiseGain.connect(globalGain);
-
-        // console.log(noiseBuffer);
-        let noiseSource = audioContext.createBufferSource();
-        noiseSource.buffer = noiseBuffer;
-        noiseSource.loop = false;
-        noiseSource.connect(noiseGain);
-
-        noiseGain.connect(analyser);
-
-        noiseSource.start();
-        setSource(noiseSource);
-        setPlaying(true);
-        setCurrSound(noiseType);
-
-        // draw();
-        requestAnimationFrame(draw);
-    };
-
     // Functions for generating different types of noise
-    const generateNoise = (noiseType) => {
-        const bufferSize = 2 * audioContext.sampleRate;
+    const generateNoise = (noiseType, play) => {
+        const bufferSize = 10 * audioContext.sampleRate;
         // console.log('buffer size: ', bufferSize);
         const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
         const output = noiseBuffer.getChannelData(0);
@@ -185,8 +158,107 @@ const Quiz = ({ questions }) => {
             default:
                 break;
         }
+        if (play) {
+            playNoise(noiseBuffer, noiseType);
+        }
+        else {
+            return noiseBuffer
+        }
+    };
 
-        playNoise(noiseBuffer, noiseType);
+    // Generic function to play a given noise type
+    const playNoise = (noiseBuffer, noiseType) => {
+        if (source_arr) {
+            source_arr.forEach(source => {
+                source.stop();
+              });
+            setSource(null);
+        }
+        const noiseGain = audioContext.createGain();
+        noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
+        noiseGain.connect(globalGain);
+
+        // console.log(noiseBuffer);
+        let noiseSource = audioContext.createBufferSource();
+        noiseSource.buffer = noiseBuffer;
+        noiseSource.loop = false;
+        noiseSource.connect(noiseGain);
+
+        noiseGain.connect(analyser);
+
+        noiseSource.start();
+        setSource([noiseSource]);
+        setPlaying(true);
+        setCurrSound(noiseType);
+
+        // draw();
+        requestAnimationFrame(draw);
+    };
+
+    const playSound = (soundType) => {
+        switch (soundType) {
+            case 'Babbling Brook':
+                const noiseBuffer1 = generateNoise("Brown Noise", false)
+                const noiseBuffer2 = generateNoise("Brown Noise", false)
+                
+                var lpf1 = audioContext.createBiquadFilter();
+                lpf1.type = "lowpass";
+                lpf1.frequency.value = 400;
+
+                var lpf2 = audioContext.createBiquadFilter();
+                lpf2.type = "lowpass";
+                lpf2.frequency.value = 14;
+
+                var rhpf = audioContext.createBiquadFilter();
+                rhpf.type = "highpass";
+                rhpf.Q.value = 33.33;
+                rhpf.frequency.value = 500;
+
+                var gain1 = audioContext.createGain();
+                gain1.gain.value = 1500;
+
+                if (source_arr) {
+                    source_arr.forEach(source => {
+                        source.stop();
+                      });
+                    setSource(null);
+                }
+
+                const noiseGain = audioContext.createGain();
+                noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
+                noiseGain.connect(globalGain);
+        
+                // console.log(noiseBuffer);
+                let noiseSource1 = audioContext.createBufferSource();
+                noiseSource1.buffer = noiseBuffer1;
+                noiseSource1.loop = false;
+                noiseSource1.connect(noiseGain);
+
+                let noiseSource2 = audioContext.createBufferSource();
+                noiseSource2.buffer = noiseBuffer2;
+                noiseSource2.loop = false;
+                noiseSource2.connect(noiseGain);
+        
+                noiseGain.connect(analyser);
+        
+                noiseSource1.start();
+                noiseSource2.start()
+
+                noiseSource1.connect(lpf2).connect(gain1).connect(rhpf.frequency);
+                noiseSource2.connect(lpf1).connect(rhpf).connect(globalGain);
+
+                setSource([noiseSource1,noiseSource2]);
+                setPlaying(true);
+                setCurrSound(soundType);
+        
+                // draw();
+                requestAnimationFrame(draw);
+                break;
+            case 'Muttering Motor':
+                break; 
+            default: 
+                break;
+        }
     };
 
     const generateOscs = (oscType) => {
@@ -242,17 +314,35 @@ const Quiz = ({ questions }) => {
     }
 
     const handlePlay = (noiseType, questionType) => {
-        if (questionType === 'noise') {
+        if (questionType === 'sound') {
             if (playing) {
-                source.stop();
+                source_arr.forEach(source => {
+                    source.stop();
+                    });
+                setSource(null);
                 if (currSound === noiseType) {
                     setPlaying(false);
                     setCurrSound(null);
                 } else {
-                    generateNoise(noiseType);
+                    playSound(noiseType, true);
                 }
             } else {
-                generateNoise(noiseType);
+                playSound(noiseType, true);
+            }
+        } else if (questionType === 'noise') {
+            if (playing) {
+                source_arr.forEach(source => {
+                    source.stop();
+                    });
+                setSource(null);
+                if (currSound === noiseType) {
+                    setPlaying(false);
+                    setCurrSound(null);
+                } else {
+                    generateNoise(noiseType, true);
+                }
+            } else {
+                generateNoise(noiseType, true);
             }
         } else if (questionType === 'osc') {
             if (playing) {
@@ -366,7 +456,7 @@ const Quiz = ({ questions }) => {
     // }
 
     const getAnswerUI = () => {
-        if (type === "noise" || type === "osc") {
+        if (type === "noise" || type === "osc" || type == "sound") {
             return (
                 <ul>
                     {
