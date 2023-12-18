@@ -73,7 +73,7 @@ export const jsQuizz = {
               "Low Pass Filter",
               "High Pass Filter",
             ],
-            type: "blank",
+            type: "sound",
             answerVals: {
               "Low Pass Filter": {IE: -2.5, SN: 0, TF: 0, JP: 0, AT: 0},
               "High Pass Filter": {IE: 2.5, SN: 0, TF: 0, JP: 0, AT: 0},

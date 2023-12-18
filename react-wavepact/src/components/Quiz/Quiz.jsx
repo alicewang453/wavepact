@@ -168,7 +168,7 @@ const Quiz = ({ questions }) => {
     };
 
     // Generic function to play a given noise type
-    const playNoise = (noiseBuffer, noiseType) => {
+    const playNoise = (noiseBuffer, noiseType, filter=null) => {
         if (source_arr) {
             source_arr.forEach(source => {
                 source.stop();
@@ -183,7 +183,13 @@ const Quiz = ({ questions }) => {
         let noiseSource = audioContext.createBufferSource();
         noiseSource.buffer = noiseBuffer;
         noiseSource.loop = false;
-        noiseSource.connect(noiseGain);
+        
+        if (filter) {
+            noiseSource.connect(filter)
+            filter.connect(noiseGain)
+        } else {
+            noiseSource.connect(noiseGain);
+        }
 
         noiseGain.connect(analyser);
 
@@ -254,12 +260,12 @@ const Quiz = ({ questions }) => {
                 var gain1 = audioContext.createGain();
                 gain1.gain.value = 1500;
 
-                if (source_arr) {
-                    source_arr.forEach(source => {
-                        source.stop();
-                      });
-                    setSource(null);
-                }
+                // if (source_arr) {
+                //     source_arr.forEach(source => {
+                //         source.stop();
+                //       });
+                //     setSource(null);
+                // }
 
                 const noiseGain = audioContext.createGain();
                 noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
@@ -298,6 +304,20 @@ const Quiz = ({ questions }) => {
                 setCurrSound(soundType);
                 requestAnimationFrame(draw);
                 break; 
+            case 'Low Pass Filter':
+                var noiseBuffer = generateNoise("White Noise", false);
+                var filter = audioContext.createBiquadFilter();
+                filter.type = 'lowpass'
+                filter.frequency.value = 1000;
+                playNoise(noiseBuffer, soundType, filter)
+                break;
+            case 'High Pass Filter':
+                var noiseBuffer = generateNoise("White Noise", false);
+                var filter = audioContext.createBiquadFilter();
+                filter.type = 'highpass'
+                filter.frequency.value = 1000;
+                playNoise(noiseBuffer, soundType, filter)
+                break;
             default: 
                 break;
         }
@@ -358,7 +378,7 @@ const Quiz = ({ questions }) => {
     const handlePlay = (noiseType, questionType) => {
         if (questionType === 'sound') {
             if (playing) {
-                if (noiseType = 'Ticking Clock') {
+                if (noiseType === 'Ticking Clock') {
                     clearInterval(intervalID)
                     setPlaying(false);
                     setCurrSound(null);
