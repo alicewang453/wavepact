@@ -346,7 +346,7 @@ const Quiz = ({ questions }) => {
             }
         } else if (questionType === 'osc') {
             if (playing) {
-                source.forEach((osc) => {
+                source_arr.forEach((osc) => {
             
                     osc.stop();
                     
