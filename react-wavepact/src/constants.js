@@ -82,7 +82,7 @@ export const jsQuizz = {
           { // i think we just choose a frequency and let them change the gain 
             question:
               "How much do you like vibrato? Slide to find out!",
-            sliderRange: { min: 0, max: 10},
+            sliderRange: { min: 0, max: 9},
             type: "slider",
             defaultValue: 5, 
             answerVals: { // change values later 
