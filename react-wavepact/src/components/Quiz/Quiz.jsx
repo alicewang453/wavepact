@@ -18,6 +18,7 @@ const Quiz = ({ questions }) => {
     const [source_arr, setSource] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [currSound, setCurrSound] = useState(null);
+    const [intervalID, setIntervalID] = useState(null)
 
     const [globalGain, setGlobalGain] = useState(null);
 
@@ -195,6 +196,40 @@ const Quiz = ({ questions }) => {
         requestAnimationFrame(draw);
     };
 
+    function createEnvelope(decayTime) {
+        decayTime = decayTime/1000
+        const now = audioContext.currentTime;
+        const envelope = audioContext.createGain();
+        envelope.gain.setValueAtTime(0, now);
+        envelope.gain.linearRampToValueAtTime(1, now + 0.001); //attack
+        envelope.gain.setTargetAtTime(0.01, now + 0.001, decayTime); //decay
+    
+        return envelope;
+    }
+
+    function triggerTick() {
+        var whiteNoise = audioContext.createBufferSource();
+        whiteNoise.buffer = generateNoise("White Noise", false);
+    
+        const filterFreqs = [Math.random() * 800 + 4000, 7000- Math.random() * 600, Math.random() * 800 + 6000];
+        const decays = [Math.random() * 8 + 3, Math.random() * 25 + 15, 28 - Math.random() * 7]
+    
+        for (var i = 0; i<filterFreqs.length; i++) {
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'bandpass'
+            filter.frequency.value = filterFreqs[i];
+            filter.Q.value = 30; 
+    
+            const envelope = createEnvelope(decays[i]);
+    
+            whiteNoise.connect(filter).connect(envelope).connect(audioContext.destination);
+        }
+    
+
+        whiteNoise.start();
+        whiteNoise.stop(audioContext.currentTime + 0.04);
+    }
+
     const playSound = (soundType) => {
         switch (soundType) {
             case 'Babbling Brook':
@@ -254,7 +289,12 @@ const Quiz = ({ questions }) => {
                 // draw();
                 requestAnimationFrame(draw);
                 break;
-            case 'Muttering Motor':
+            case 'Ticking Clock':
+                const intervalID = setInterval(triggerTick, 250);
+                setIntervalID(intervalID);
+                setPlaying(true);
+                setCurrSound(soundType);
+                requestAnimationFrame(draw);
                 break; 
             default: 
                 break;
@@ -316,15 +356,21 @@ const Quiz = ({ questions }) => {
     const handlePlay = (noiseType, questionType) => {
         if (questionType === 'sound') {
             if (playing) {
-                source_arr.forEach(source => {
-                    source.stop();
-                    });
-                setSource(null);
-                if (currSound === noiseType) {
+                if (noiseType = 'Ticking Clock') {
+                    clearInterval(intervalID)
                     setPlaying(false);
                     setCurrSound(null);
                 } else {
-                    playSound(noiseType, true);
+                    source_arr.forEach(source => {
+                        source.stop();
+                        });
+                    setSource(null);
+                    if (currSound === noiseType) {
+                        setPlaying(false);
+                        setCurrSound(null);
+                    } else {
+                        playSound(noiseType, true);
+                    }
                 }
             } else {
                 playSound(noiseType, true);
