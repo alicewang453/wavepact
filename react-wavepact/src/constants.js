@@ -47,19 +47,6 @@ export const jsQuizz = {
               "Triangle": {IE: 0, SN: 2, TF: 0, JP: 0, AT: 0},
             },
           },
-          {
-            question:
-              "Watch the live coding clips and pick the one you like better!",
-            choices: [
-              "Silly Sonic Pi",
-              "Tomfoolerous Tidal Cycles",
-            ],
-            type: "video",
-            answerVals: {
-              "Silly Sonic Pi": {IE: 5, SN: 0, TF: 0, JP: 0, AT: 0},
-              "Tomfoolerous Tidal Cycles": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
-            },
-          },
           { // rephrase q
             question:
               "Slide to choose your preferred number of partials for additive synthesis!",
@@ -126,17 +113,6 @@ export const jsQuizz = {
               "FM (Frequency Modulation)": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
             },
           }
-    //   {
-    //     question: "What is Babel?",
-    //     choices: [
-    //       "JavaScript interpreter",
-    //       "JavaScript transpiler",
-    //       "JavaScript compiler",
-    //       "None of the above",
-    //     ],
-    //     type: "MCQs",
-    //     correctAnswer: "JavaScript compiler",
-    //   },
     ],
   };
 
