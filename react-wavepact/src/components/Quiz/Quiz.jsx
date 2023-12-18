@@ -588,6 +588,8 @@ const Quiz = ({ questions }) => {
         const ptype = ie.concat(sn, tf, jp, '-', at);
         const pytpeMessage = "Your personality type is ";
 
+        const hyperlink = "https://www.16personalities.com/".concat(ptype4.toLowerCase(), "-personality");
+
         // const percentages = 
         
         return ( <>
@@ -595,7 +597,7 @@ const Quiz = ({ questions }) => {
             <span className="ptype-message">{pytpeMessage}</span>
             <span className='ptype'>{ptype}</span>
             <br></br>
-            <a href="https://www.16personalities.com/estp-personality" target="_blank" class="pname">{personalityNames[ptype4]}</a>
+            <a href={hyperlink} target="_blank" class="pname">{personalityNames[ptype4]}</a>
             <br></br>
         </>
         )
