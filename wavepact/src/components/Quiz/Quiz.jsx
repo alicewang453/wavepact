@@ -349,6 +349,7 @@ const Quiz = ({ questions }) => {
 
         if (currentQuestion !== questions.length - 1) {
             setCurrentQuestion((prev) => prev + 1);
+            setSliderValue(questions[currentQuestion + 1]?.defaultValue || 5);
         } else {
             setCurrentQuestion(0);
             setShowResult(true);

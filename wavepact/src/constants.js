@@ -60,9 +60,9 @@ export const jsQuizz = {
               "Tomfoolerous Tidal Cycles": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
             },
           },
-          {
+          { // rephrase q
             question:
-              "Choose your preferred number of partials for additive synthesis! (Adjust the scale to your desired amount)",
+              "Slide to choose your preferred number of partials for additive synthesis!",
             type: "slider",
             sliderRange: { min: 0, max: 10},
             defaultValue: 5, 
@@ -78,6 +78,52 @@ export const jsQuizz = {
               8: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
               9: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
               10: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 }
+            }
+          }, 
+          { // insert normal 
+            question:
+              "Choose what kind of filter effect you like best!",
+            choices: [
+              "Low Pass Filter",
+              "High Pass Filter",
+            ],
+            type: "blank",
+            answerVals: {
+              "Low Pass Filter": {IE: 5, SN: 0, TF: 0, JP: 0, AT: 0},
+              "High Pass Filter": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
+            },
+          },
+          { // i think we just choose a frequency and let them change the gain 
+            question:
+              "How much do you like vibrato? Slide to find out!",
+            sliderRange: { min: 0, max: 10},
+            type: "slider",
+            defaultValue: 5, 
+            answerVals: { // change values later 
+              0: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              1: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
+              2: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              3: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              4: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              5: { IE: 0, SN: 0, TF: 0, JP: 0, AT: 2 },  // For slider value 0
+              6: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },  // For slider value 1
+              7: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              8: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              9: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 },
+              10: { IE: 1, SN: 1, TF: 1, JP: 1, AT: 3 }
+            }
+          },
+          { 
+            question:
+              "Hey do you still listen to the radio? Choose what kind of modulation sounds best to you!",
+            choices: [
+              "AM (Amplitude Modulation)",
+              "FM (Frequency Modulation)",
+            ],
+            type: "blank",
+            answerVals: {
+              "AM (Amplitude Modulation)": {IE: 5, SN: 0, TF: 0, JP: 0, AT: 0},
+              "FM (Frequency Modulation)": {IE: -5, SN: 0, TF: 0, JP: 0, AT: 0},
             },
           }
     //   {
