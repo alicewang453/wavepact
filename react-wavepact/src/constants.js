@@ -49,7 +49,7 @@ export const jsQuizz = {
           },
           { // rephrase q
             question:
-              "Slide to add waves until you like it!",
+              "Slide for the number of waves you like most!",
             type: "slider",
             sliderRange: { min: 1, max: 10},
             defaultValue: 5, 

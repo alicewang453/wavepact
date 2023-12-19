@@ -13,7 +13,7 @@ const Quiz = ({ questions }) => {
         questions[currentQuestion]?.defaultValue || 5
       );
 
-    const [playButtonClicked, setPlayButtonClicked] = useState(false);
+    const [playButtonClicked, setPlayButtonClicked] = useState(null);
 
 
     const [audioContext, setAudioContext] = useState(null);
@@ -56,6 +56,13 @@ const Quiz = ({ questions }) => {
             cancelAnimationFrame(animationId);
         };
     }, [animationId]);
+
+    useEffect(() => {
+        console.log("onPlayButtonClick function", playButtonClicked);
+        if (playButtonClicked) {
+          handlePlay("add", "osc");
+        }
+      }, [playButtonClicked]);
 
     // vizualizer
     const draw = () => {
@@ -332,7 +339,15 @@ const Quiz = ({ questions }) => {
         
         const freq = 261.625565300598634;
 
-        const npartials = 1; // change for additive synthesis
+        var npartials; 
+        console.log("playButton CLicked", playButtonClicked)
+        if (playButtonClicked) {
+            npartials = sliderValue;
+        }
+        else {
+            npartials = 1;
+        }
+        console.log("npartials", npartials)
         const amOn = false;
         
         // create oscs and store them in a list
@@ -375,9 +390,10 @@ const Quiz = ({ questions }) => {
             }
             oscs[i].start();
         }
+
         return oscs;
     }
-
+    
     const handlePlay = (noiseType, questionType) => {
         if (questionType === 'sound') {
             if (playing) {
@@ -429,7 +445,12 @@ const Quiz = ({ questions }) => {
                     setCurrSound(noiseType);
                 }
             } else {
-                var oscs = generateOscs(noiseType);
+                var oscs;
+                if (noiseType==="add") {
+                    oscs = generateOscs("sine")
+                } else {
+                    oscs = generateOscs(noiseType)
+                }
                 setSource(oscs);
                 setPlaying(true);
                 setCurrSound(noiseType);
@@ -443,8 +464,7 @@ const Quiz = ({ questions }) => {
         // Add logic here to play the sound associated with the slider value
         // For example, you can use the existing playSound function
         // playSound("YourSoundTypeHere");
-        console.log("button clicked")
-        setPlayButtonClicked(true);
+        setPlayButtonClicked(true)
       };
 
     const { question, choices, answerVals, type} = questions[currentQuestion]; 
@@ -466,12 +486,19 @@ const Quiz = ({ questions }) => {
     }
 
     const onSliderChange = (event) => {
+        if (playing){
+            source_arr.forEach((osc) => {
+                osc.stop();
+            });
+            setPlaying(false);
+            setCurrSound(null);
+        } 
         const value = parseFloat(event.target.value, 10);
         setSliderValue(value);
-        console.log("value",value)
+        console.log("slider value",value)
         const currentAnswerVals = questions[currentQuestion].answerVals;
-        console.log("selected answerVals", currentAnswerVals)
         onAnswerClick(value, value, currentAnswerVals);
+        setPlaying(false);
         setPlayButtonClicked(false);
     };
 
