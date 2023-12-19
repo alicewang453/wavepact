@@ -13,6 +13,9 @@ const Quiz = ({ questions }) => {
         questions[currentQuestion]?.defaultValue || 5
       );
 
+    const [playButtonClicked, setPlayButtonClicked] = useState(false);
+
+
     const [audioContext, setAudioContext] = useState(null);
     // const [whiteNoiseBuffer, setWhiteNoiseBuffer] = useState(null);
     const [source_arr, setSource] = useState(null);
@@ -436,6 +439,14 @@ const Quiz = ({ questions }) => {
         }
     };
 
+    const onPlayButtonClick = () => {
+        // Add logic here to play the sound associated with the slider value
+        // For example, you can use the existing playSound function
+        // playSound("YourSoundTypeHere");
+        console.log("button clicked")
+        setPlayButtonClicked(true);
+      };
+
     const { question, choices, answerVals, type} = questions[currentQuestion]; 
     
     const onAnswerClick = (answer, index, answerVals) => {
@@ -461,6 +472,7 @@ const Quiz = ({ questions }) => {
         const currentAnswerVals = questions[currentQuestion].answerVals;
         console.log("selected answerVals", currentAnswerVals)
         onAnswerClick(value, value, currentAnswerVals);
+        setPlayButtonClicked(false);
     };
 
 
@@ -509,6 +521,7 @@ const Quiz = ({ questions }) => {
             setCurrentQuestion(0);
             setShowResult(true);
         }
+        setPlayButtonClicked(false);
     }
 
     const onTryAgain = () => {
@@ -553,6 +566,9 @@ const Quiz = ({ questions }) => {
                   onChange={onSliderChange}
                 />
                 <span>{sliderValue}</span>
+                <button onClick={onPlayButtonClick} disabled={playButtonClicked}>
+                    Play
+                </button>
               </div>
             );
           }
