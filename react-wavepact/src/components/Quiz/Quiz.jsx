@@ -61,6 +61,7 @@ const Quiz = ({ questions }) => {
     useEffect(() => {
         console.log("onPlayButtonClick function", playButtonClicked);
         if (playButtonClicked) {
+            setAnswerIdx()
             if (questionID===4) {
                 handlePlay("add", "osc");
             } else { //lfo 
@@ -537,27 +538,37 @@ const Quiz = ({ questions }) => {
         setAnswerIdx(null);
         console.log('Selected: ', answerChoice)
         console.log('prev result: ', result);
-        if (type === "slider") {
-            var newResult = {
-                IE: result.IE + answerPersonality.IE,
-                SN: result.SN + answerPersonality.SN,
-                TF: result.TF + answerPersonality.TF,
-                JP: result.JP + answerPersonality.JP,
-                AT: result.AT + answerPersonality.AT, 
-            };
-            setResult(newResult);
-            console.log('new result: ', newResult);
-        } else {
-            // Handle other types of answers
-            var newResult = {
-              IE: result.IE + answerPersonality.IE,
-              SN: result.SN + answerPersonality.SN,
-              TF: result.TF + answerPersonality.TF,
-              JP: result.JP + answerPersonality.JP,
-              AT: result.AT + answerPersonality.AT,
-            };
-            setResult(newResult);
-        }
+
+        var newResult = {
+            IE: result.IE + answerPersonality.IE,
+            SN: result.SN + answerPersonality.SN,
+            TF: result.TF + answerPersonality.TF,
+            JP: result.JP + answerPersonality.JP,
+            AT: result.AT + answerPersonality.AT,
+          };
+          setResult(newResult);
+
+        // if (type === "slider") {
+        //     var newResult = {
+        //         IE: result.IE + answerPersonality.IE,
+        //         SN: result.SN + answerPersonality.SN,
+        //         TF: result.TF + answerPersonality.TF,
+        //         JP: result.JP + answerPersonality.JP,
+        //         AT: result.AT + answerPersonality.AT, 
+        //     };
+        //     setResult(newResult);
+        //     console.log('new result: ', newResult);
+        // } else {
+        //     // Handle other types of answers
+        //     var newResult = {
+        //       IE: result.IE + answerPersonality.IE,
+        //       SN: result.SN + answerPersonality.SN,
+        //       TF: result.TF + answerPersonality.TF,
+        //       JP: result.JP + answerPersonality.JP,
+        //       AT: result.AT + answerPersonality.AT,
+        //     };
+        //     setResult(newResult);
+        // }
 
         
         //     prev.IE += answerPersonality.IE;
