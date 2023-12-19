@@ -333,7 +333,7 @@ const Quiz = ({ questions }) => {
         }
     };
 
-    const generateOscs = (oscType) => {
+    const generateOscs = (oscType, synthType=null) => {
         const gainNode = audioContext.createGain();
         gainNode.gain.setValueAtTime(0.8, audioContext.currentTime);
         
@@ -341,7 +341,7 @@ const Quiz = ({ questions }) => {
 
         var npartials; 
         console.log("playButton CLicked", playButtonClicked)
-        if (playButtonClicked) {
+        if (playButtonClicked && synthType==="add") {
             npartials = sliderValue;
         }
         else {
@@ -447,7 +447,7 @@ const Quiz = ({ questions }) => {
             } else {
                 var oscs;
                 if (noiseType==="add") {
-                    oscs = generateOscs("sine")
+                    oscs = generateOscs("sine", "add")
                 } else {
                     oscs = generateOscs(noiseType)
                 }
@@ -486,13 +486,16 @@ const Quiz = ({ questions }) => {
     }
 
     const onSliderChange = (event) => {
-        if (playing){
-            source_arr.forEach((osc) => {
-                osc.stop();
-            });
-            setPlaying(false);
-            setCurrSound(null);
-        } 
+        // if (playing){
+        //     source_arr.forEach((osc) => {
+        //         osc.stop();
+        //     });
+        //     setPlaying(false);
+        //     setCurrSound(null);
+        // } 
+        if (playing) {
+            handlePlay(currSound, "osc")
+        }
         const value = parseFloat(event.target.value, 10);
         setSliderValue(value);
         console.log("slider value",value)
@@ -505,7 +508,12 @@ const Quiz = ({ questions }) => {
 
     const onClickNext = () => {
         if (playing) {
-            handlePlay(currSound, type);
+            if (type === "slider") {
+                handlePlay(currSound, "osc");
+            } else {
+                handlePlay(currSound, type);
+            }
+            
         } 
         setAnswerIdx(null);
         console.log('Selected: ', answerChoice)
