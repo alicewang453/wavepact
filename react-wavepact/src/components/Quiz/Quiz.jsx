@@ -9,6 +9,7 @@ const Quiz = ({ questions }) => {
     const [answerPersonality, setAnswerPersonality] = useState(null);
     const [result, setResult] = useState(resultInitialState);
     const [showResult, setShowResult] = useState(false);
+    const [questionID, setQuestionID] = useState(0);
     const [sliderValue, setSliderValue] = useState(
         questions[currentQuestion]?.defaultValue || 5
       );
@@ -60,7 +61,12 @@ const Quiz = ({ questions }) => {
     useEffect(() => {
         console.log("onPlayButtonClick function", playButtonClicked);
         if (playButtonClicked) {
-          handlePlay("add", "osc");
+            if (questionID===4) {
+                handlePlay("add", "osc");
+            } else { //lfo 
+                handlePlay("lfo", "osc");
+            }
+          
         }
       }, [playButtonClicked]);
 
@@ -391,6 +397,16 @@ const Quiz = ({ questions }) => {
             oscs[i].start();
         }
 
+        if (synthType === "lfo" && oscs.length === 1) {
+            const lfo = audioContext.createOscillator();
+            lfo.frequency.value = sliderValue
+            const lfoGain = audioContext.createGain();
+            lfoGain.gain.value = 7
+            lfo.connect(lfoGain).connect(oscs[0].frequency)
+            lfo.start()
+            oscs.push(lfo)
+        }
+
         return oscs;
     }
     
@@ -448,6 +464,8 @@ const Quiz = ({ questions }) => {
                 var oscs;
                 if (noiseType==="add") {
                     oscs = generateOscs("sine", "add")
+                } else if (noiseType === "lfo") {
+                    oscs = generateOscs("sine", "lfo")
                 } else {
                     oscs = generateOscs(noiseType)
                 }
@@ -460,11 +478,12 @@ const Quiz = ({ questions }) => {
         }
     };
 
-    const onPlayButtonClick = () => {
+    const onPlayButtonClick = (questionID) => {
         // Add logic here to play the sound associated with the slider value
         // For example, you can use the existing playSound function
         // playSound("YourSoundTypeHere");
         setPlayButtonClicked(true)
+        setQuestionID(questionID)
       };
 
     const { question, choices, answerVals, type} = questions[currentQuestion]; 
@@ -601,7 +620,7 @@ const Quiz = ({ questions }) => {
                   onChange={onSliderChange}
                 />
                 <span>{sliderValue}</span>
-                <button onClick={onPlayButtonClick} disabled={playButtonClicked}>
+                <button onClick={() => onPlayButtonClick(questions[currentQuestion].id)} disabled={playButtonClicked}>
                     Play
                 </button>
               </div>

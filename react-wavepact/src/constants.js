@@ -1,6 +1,7 @@
 export const jsQuizz = {
     questions: [
         {
+            id: 1, 
             question:
               "Which noise do you prefer? (Click each to hear)",
             choices: [
@@ -18,6 +19,7 @@ export const jsQuizz = {
             },
           },
         {
+            id: 2,
             question:
               "What sound effect do you like best?",
             choices: [
@@ -31,6 +33,7 @@ export const jsQuizz = {
             },
           },
         {
+            id: 3,
             question:
               "Choose your favorite waveform!",
             choices: [
@@ -48,6 +51,7 @@ export const jsQuizz = {
             },
           },
           { // rephrase q
+            id: 4,
             question:
               "Slide for the number of waves you like most!",
             type: "slider",
@@ -67,6 +71,7 @@ export const jsQuizz = {
             }
           }, 
           { // insert normal 
+            id: 5,
             question:
               "Choose what kind of filter effect you like best!",
             choices: [
@@ -80,6 +85,7 @@ export const jsQuizz = {
             },
           },
           { // i think we just choose a frequency and let them change the gain 
+            id: 6,
             question:
               "How much do you like vibrato? Slide to find out!",
             sliderRange: { min: 0, max: 9},
@@ -99,6 +105,7 @@ export const jsQuizz = {
             }
           },
           { 
+            id: 7,
             question:
               "Hey do you still listen to the radio? Choose what kind of modulation sounds best to you!",
             choices: [
