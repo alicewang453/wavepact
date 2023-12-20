@@ -112,7 +112,7 @@ export const jsQuizz = {
               "AM (Amplitude Modulation)",
               "FM (Frequency Modulation)",
             ],
-            type: "blank",
+            type: "osc",
             answerVals: {
               "AM (Amplitude Modulation)": {IE: 0, SN: 0, TF: -3, JP: 5, AT: 0},
               "FM (Frequency Modulation)": {IE: 0, SN: 0, TF: 3, JP: -5, AT: 0},

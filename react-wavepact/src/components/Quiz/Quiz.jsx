@@ -38,12 +38,12 @@ const Quiz = ({ questions }) => {
         gg.gain.setValueAtTime(0.8, audioCtx.currentTime);
         gg.connect(audioCtx.destination);
         setGlobalGain(gg);
-        console.log('creating audio context & global gain')
+        // console.log('creating audio context & global gain')
         const globalAnalyser = audioCtx.createAnalyser();
         gg.connect(globalAnalyser);
         // globalAnalyser.connect(audioCtx.destination)
         setAnalyser(globalAnalyser);
-        console.log('created analyser');
+        // console.log('created analyser');
         // draw();
         return () => {
             if (audioContext) {
@@ -59,7 +59,7 @@ const Quiz = ({ questions }) => {
     }, [animationId]);
 
     useEffect(() => {
-        console.log("onPlayButtonClick function", playButtonClicked);
+        // console.log("onPlayButtonClick function", playButtonClicked);
         if (playButtonClicked) {
             setAnswerIdx()
             if (questionID===4) {
@@ -342,20 +342,20 @@ const Quiz = ({ questions }) => {
 
     const generateOscs = (oscType, synthType=null) => {
         const gainNode = audioContext.createGain();
-        gainNode.gain.setValueAtTime(0.8, audioContext.currentTime);
+        var gain = 0.8;
+        // gainNode.gain.setValueAtTime(0.8, audioContext.currentTime);
         
         const freq = 261.625565300598634;
 
         var npartials; 
-        console.log("playButton CLicked", playButtonClicked)
+        // console.log("playButton CLicked", playButtonClicked)
         if (playButtonClicked && synthType==="add") {
             npartials = sliderValue;
         }
         else {
             npartials = 1;
         }
-        console.log("npartials", npartials)
-        const amOn = false;
+        // console.log("npartials", npartials)
         
         // create oscs and store them in a list
         var oscs = []
@@ -365,9 +365,45 @@ const Quiz = ({ questions }) => {
 
         var waveform = oscType.toLowerCase();
 
+        // calc gain
+        gain /= npartials;
         if (waveform === "square" || waveform === "sawtooth") {
-            gainNode.gain.setValueAtTime(0.4, audioContext.currentTime); //saws & squares are loud 
+            gain /= 3 ; //saws & squares are loud 
           }
+        
+        var modulated;
+        var depth;
+        var modulatedFreq;
+        var fmModulatorFreq;
+        var fmModulationIndex;
+        var AMModulatorFrequency = 180;
+        var FMModulatorFrequency = 180;
+        var FMModulatorIndex = 100;
+        if (synthType === "am") {
+            modulatedFreq = audioContext.createOscillator();
+            modulatedFreq.frequency.value = AMModulatorFrequency;
+            modulated = audioContext.createGain();
+            depth = audioContext.createGain();
+            depth.gain.value = 0; //start at 0 so no onset click
+            modulated.gain.value = 0;
+            //console.log(depth)
+            modulatedFreq.connect(depth).connect(modulated.gain);
+            // modulatedFreq.connect(gainNode.gain).connect(globalGain).connect(depth);
+            // gainNodes[1] = modulated;
+            // gainNodes[2] = depth;
+    
+            // console.log("am done");
+        } else if (synthType === "fm") {
+            fmModulatorFreq = audioContext.createOscillator();
+            fmModulationIndex = audioContext.createGain();
+            fmModulationIndex.gain.value = FMModulatorIndex;
+            fmModulatorFreq.frequency.value = FMModulatorFrequency;
+    
+            fmModulatorFreq.connect(fmModulationIndex);
+            // gainNodes.push(fmModulationIndex); 
+            // console.log('fm done');
+        }
+        // console.log('oscs: ', oscs.length);
         // assign frequencies and start oscs
         for (var i = 0; i < oscs.length; i++) {
             // frequency
@@ -387,15 +423,34 @@ const Quiz = ({ questions }) => {
                     (i + 1) * freq - Math.random() * 5,
                     audioContext.currentTime
                 )
-            }    
+            }   
+            gainNode.gain.setValueAtTime(gain, audioContext.currentTime); 
             // waveform
             oscs[i].type = waveform;
-            if (amOn === "true") {
+            if (synthType === 'am') {
                 oscs[i].connect(modulated).connect(gainNode).connect(globalGain);
+                // console.log('am connected')
+            } else if (synthType === "fm") {
+                fmModulationIndex.connect(oscs[i].frequency);
+                oscs[i].connect(gainNode).connect(globalGain);
+                // console.log('fm connected')
             } else {
+
                 oscs[i].connect(gainNode).connect(globalGain);
             }
             oscs[i].start();
+        }
+        if (synthType === "am") {
+            modulated.connect(audioContext.destination);
+            modulatedFreq.start();
+            oscs.push(modulatedFreq);
+            modulated.gain.setTargetAtTime(0.2, audioContext.currentTime, 0.01);
+            depth.gain.setTargetAtTime(0.2, audioContext.currentTime, 0.01);
+            // modulators.push(modulatedFreq);
+        } else if (synthType === 'fm') {
+            fmModulatorFreq.start();
+            oscs.push(fmModulatorFreq)
+            // modulators.push(fmModulatorFreq);
         }
 
         if (synthType === "lfo" && oscs.length === 1) {
@@ -411,24 +466,27 @@ const Quiz = ({ questions }) => {
         return oscs;
     }
     
-    const handlePlay = (noiseType, questionType) => {
+    const handlePlay = (noiseType, questionType) => { // should refactor noiseType as "choice"
         if (questionType === 'sound') {
             if (playing) {
-                if (noiseType === 'Ticking Clock') {
+                if (currSound === 'Ticking Clock') {
                     clearInterval(intervalID)
-                    setPlaying(false);
-                    setCurrSound(null);
-                } else {
+                    // setPlaying(false);
+                    // setCurrSound(null);
+                    setSource(null);
+                } else { // babbling brook
                     source_arr.forEach(source => {
                         source.stop();
                         });
                     setSource(null);
-                    if (currSound === noiseType) {
-                        setPlaying(false);
-                        setCurrSound(null);
-                    } else {
-                        playSound(noiseType, true);
-                    }
+                    // setPlaying(false);
+                    // setCurrSound(null);
+                }
+                if (currSound === noiseType) {
+                    setPlaying(false);
+                    setCurrSound(null);
+                } else {
+                    playSound(noiseType, true);
                 }
             } else {
                 playSound(noiseType, true);
@@ -457,7 +515,14 @@ const Quiz = ({ questions }) => {
                     setPlaying(false);
                     setCurrSound(null);
                 } else {
-                    var oscs = generateOscs(noiseType);
+                    var oscs;
+                    if (noiseType === "AM (Amplitude Modulation)") { // am & fm are multiple choice and not sliders
+                        oscs = generateOscs("sine", "am");
+                    } else if (noiseType === "FM (Frequency Modulation)") {
+                        oscs = generateOscs("sine", "fm");
+                    } else {
+                        oscs = generateOscs(noiseType);
+                    }
                     setSource(oscs);
                     setCurrSound(noiseType);
                 }
@@ -467,6 +532,10 @@ const Quiz = ({ questions }) => {
                     oscs = generateOscs("sine", "add")
                 } else if (noiseType === "lfo") {
                     oscs = generateOscs("sine", "lfo")
+                } else if (noiseType === "AM (Amplitude Modulation)") {
+                    oscs = generateOscs("sine", "am")
+                } else if (noiseType === "FM (Frequency Modulation)") {
+                    oscs = generateOscs("sine", "fm")
                 } else {
                     oscs = generateOscs(noiseType)
                 }
@@ -494,9 +563,9 @@ const Quiz = ({ questions }) => {
         // console.log(index);
         setAnswerIdx(index);
         setAnswerChoice(answer);
-        console.log(answerChoice);
+        // console.log(answerChoice);
         setAnswerPersonality(answerVals[answer]);
-        console.log('answer personality: ', answerPersonality);
+        // console.log('answer personality: ', answerPersonality);
         // console.log('curr result: ', result);
         // if (answer === correctAnswer) {
         //     setAnswer(true);
@@ -518,7 +587,7 @@ const Quiz = ({ questions }) => {
         }
         const value = parseFloat(event.target.value, 10);
         setSliderValue(value);
-        console.log("slider value",value)
+        // console.log("slider value",value)
         const currentAnswerVals = questions[currentQuestion].answerVals;
         onAnswerClick(value, value, currentAnswerVals);
         setPlaying(false);
@@ -537,7 +606,7 @@ const Quiz = ({ questions }) => {
         } 
         setAnswerIdx(null);
         console.log('Selected: ', answerChoice)
-        console.log('prev result: ', result);
+        // console.log('prev result: ', result);
 
         var newResult = {
             IE: result.IE + answerPersonality.IE,
@@ -638,7 +707,7 @@ const Quiz = ({ questions }) => {
             );
           }
 
-        return (
+        return ( // default
         <ul>
             {
                 choices.map((choice, index) => (
